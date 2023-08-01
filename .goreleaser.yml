@@ -21,8 +21,8 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
     format_overrides:
-    - goos: windows
-      format: zip
+      - goos: windows
+        format: zip
 brews:
   - repository:
       owner: tomozo6
@@ -31,3 +31,19 @@ brews:
     folder: Formula
     homepage: "https://github.com/tomozo6/moray"
     description: "moray is a CLI tool to easily realize PortForwarding using SSMSessionManager of AWS."
+scoops:
+  - name: moray
+    url_template: "https://github.com/tomozo6/moray/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
+    homepage: "https://github.com/tomozo6/moray"
+    description: "moray is a CLI tool to easily realize PortForwarding using SSMSessionManager of AWS."
+    license: MIT
+    shortcuts: [["moray.exe", "moray"]]
+    repository:
+      owner: tomozo6
+      name: scoop-bucket
+      branch: master
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"

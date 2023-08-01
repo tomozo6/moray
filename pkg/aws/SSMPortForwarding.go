@@ -43,7 +43,7 @@ func SSMPortForwarding(c *ssm.Client, bastionID *string, dbHost *string, dbPort 
 	if runtime.GOOS == "windows" {
 		smpCmd += ".exe"
 	}
-	cmd := exec.Command("session-manager-plugin", string(encodedSessionOutput), *region, "StartSession", *profile, string(encodedSessionInput))
+	cmd := exec.Command(smpCmd, string(encodedSessionOutput), *region, "StartSession", *profile, string(encodedSessionInput))
 
 	// コマンドの実行には標準入出力を使う
 	cmd.Stdin = os.Stdin

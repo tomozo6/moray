@@ -48,5 +48,5 @@ scoops:
     repository:
       owner: tomozo6
       name: scoop-bucket
-      branch: master
+      branch: main
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"

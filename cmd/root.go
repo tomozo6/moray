@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -15,15 +16,18 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "moray",
-	Short:   "Short moray",
-	Long:    "Long moray",
+	Use:   "moray",
+	Short: "moray",
+	Long: `moray is a CLI tool
+created to facilitate port forwarding operations
+to remote hosts with the AWS System Manager session manager.`,
 	Version: Version,
 
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// フラグの読み込み
 		inputProfile, _ := cmd.PersistentFlags().GetString("profile")
+		witerFlag, _ := cmd.PersistentFlags().GetBool("writer")
 
 		// profileが指定されている場合はその値をプロファイル名とする。profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
 		var profile string
@@ -50,12 +54,15 @@ var rootCmd = &cobra.Command{
 
 		// ユーザーにBastionを選択させる
 		ec2Names := e.GetInstanceNames()
-		bastionName := ui.AskBastion(ec2Names)
+		bastionName, err := ui.AskBastion(ec2Names)
+		if err != nil {
+			log.Fatalln(err)
+		}
 
 		// 選択されたBastion名からインスタンスIDを取得する
 		bastionInfo, err := e.GetInstanceInfoFromName(bastionName)
 		if err != nil {
-			fmt.Println(err)
+			log.Fatalln(err)
 		}
 		bastionID := bastionInfo.InstanceId
 
@@ -67,7 +74,10 @@ var rootCmd = &cobra.Command{
 
 		// ユーザーに接続したいクラスタ名を選択させる
 		dbNames := d.GetDBClusterNames()
-		dbName := ui.AskDB(dbNames)
+		dbName, err := ui.AskDB(dbNames)
+		if err != nil {
+			log.Fatalln(err)
+		}
 
 		// 選択されたクラスタ名から必要な情報を取得する
 		dbInfo, err := d.GetDBClusterInfoFromName(dbName)
@@ -75,7 +85,14 @@ var rootCmd = &cobra.Command{
 			fmt.Println(err)
 		}
 
-		dbHost := dbInfo.ReaderEndpoint
+		// Writerインスタンスに接続するかReaderインスタンスに接続するか
+		var dbHost *string
+		if witerFlag {
+			dbHost = dbInfo.Endpoint
+		} else {
+			dbHost = dbInfo.ReaderEndpoint
+		}
+
 		dbPort := dbInfo.Port
 		localPort := dbInfo.Port
 
@@ -96,4 +113,5 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "Use a specific profile from your credential file.")
+	rootCmd.PersistentFlags().BoolP("writer", "w", false, "Connect to the writer instance. (Connects to the reader instance if not specified.)")
 }

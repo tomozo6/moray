@@ -34,22 +34,11 @@ func (d *DBClusters) GetDBClusterNames() []string {
 }
 
 // クラスタ名からそのクラスタの詳細情報を返します。
-func (d *DBClusters) GetDBClusterInfoFromName(name string) (types.DBCluster, error) {
+func (d *DBClusters) GetDBClusterInfoFromName(name *string) (types.DBCluster, error) {
 	for _, dbcluster := range *d {
-		if *dbcluster.DBClusterIdentifier == name {
+		if *dbcluster.DBClusterIdentifier == *name {
 			return dbcluster, nil
 		}
 	}
 	return types.DBCluster{}, errors.New("該当のクラスタが存在しません。")
 }
-
-// for _, cluster := range output.DBClusters {
-// fmt.Println(*cluster.DBClusterIdentifier)
-// fmt.Println(*cluster.Endpoint)
-// fmt.Println(*cluster.ReaderEndpoint)
-// fmt.Println(*cluster.Port)
-// fmt.Println(*cluster.Engine)
-// }
-//
-// return ec2InstancesInfo, nil
-// }

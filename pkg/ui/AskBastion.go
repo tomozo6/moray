@@ -1,12 +1,10 @@
 package ui
 
 import (
-	"fmt"
-
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func AskBastion(EC2InstancesName []string) string{
+func AskBastion(EC2InstancesName []string) (*string, error) {
 
 	var qs = []*survey.Question{
 		{
@@ -24,8 +22,8 @@ func AskBastion(EC2InstancesName []string) string{
 
 	err := survey.Ask(qs, &answers)
 	if err != nil {
-		fmt.Println(err.Error())
+		return nil, err
 	}
 
-	return answers.FavoriteColor
+	return &answers.FavoriteColor, nil
 }

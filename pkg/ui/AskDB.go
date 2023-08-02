@@ -1,12 +1,10 @@
 package ui
 
 import (
-	"fmt"
-
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func AskDB(DBNames []string) string{
+func AskDB(DBNames []string) (*string, error) {
 
 	var qs = []*survey.Question{
 		{
@@ -24,8 +22,8 @@ func AskDB(DBNames []string) string{
 
 	err := survey.Ask(qs, &answers)
 	if err != nil {
-		fmt.Println(err.Error())
+		return nil, err
 	}
 
-	return answers.DBName
+	return &answers.DBName, nil
 }

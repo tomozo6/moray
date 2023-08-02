@@ -45,11 +45,11 @@ func (e *EC2Instances) GetInstanceNames() []string {
 }
 
 // 合致する名前のインスタンス詳細情報を返します。
-func (e *EC2Instances) GetInstanceInfoFromName(name string) (types.Instance, error) {
+func (e *EC2Instances) GetInstanceInfoFromName(name *string) (types.Instance, error) {
 	for _, instance := range *e {
 		for _, tag := range instance.Tags {
 			if *tag.Key == "Name" {
-				if *tag.Value == name {
+				if *tag.Value == *name {
 					return instance, nil
 				}
 			}

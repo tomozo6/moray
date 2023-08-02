@@ -28,6 +28,7 @@ to remote hosts with the AWS System Manager session manager.`,
 		// フラグの読み込み
 		inputProfile, _ := cmd.PersistentFlags().GetString("profile")
 		witerFlag, _ := cmd.PersistentFlags().GetBool("writer")
+		inputLocalPort, _ := cmd.PersistentFlags().GetInt32("port")
 
 		// profileが指定されている場合はその値をプロファイル名とする。profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
 		var profile string
@@ -94,7 +95,13 @@ to remote hosts with the AWS System Manager session manager.`,
 		}
 
 		dbPort := dbInfo.Port
-		localPort := dbInfo.Port
+
+		var localPort *int32
+		if inputLocalPort == 0 {
+			localPort = dbInfo.Port
+		} else {
+			localPort = &inputLocalPort
+		}
 
 		// SSM Clientの生成
 		ssmClient, _ := aws.MakeSSMSVC(&profile)
@@ -112,6 +119,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringP("profile", "p", "", "Use a specific profile from your credential file.")
+	rootCmd.PersistentFlags().String("profile", "", "Use a specific profile from your credential file.")
 	rootCmd.PersistentFlags().BoolP("writer", "w", false, "Connect to the writer instance. (Connects to the reader instance if not specified.)")
+	rootCmd.PersistentFlags().Int32P("port", "p", 0, "Local port number. (If not set, the same number as the port number of the connection destination DB will be set as the local port.)")
 }

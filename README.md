@@ -2,11 +2,12 @@
 
 morayは、AWS System Mnagerセッションマネージャーでリモートホストへのポートフォワードをする操作を楽にするために作成したCLIツールです。
 
-## demo
+フォワーディング先の対象は`RDS`及び`DocumentDB`となります。
 
 # 前提条件
 
 ## 依存ツール
+
 morayを使用するためには、AWSの`Session Manager Plugin`がインストールされている必要があります。
 
 [AWS CLI 用の Session Manager プラグインをインストールする](https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
@@ -51,11 +52,13 @@ moray
 踏み台EC2や接続先のDBを対話形式で選択し、ポートフォワーディングをします。
 接続先のDBは`リーダーインスタンス`になります。
 
+なお接続先DBのポート番号と同じ番号をローカルポートとしてフォワーディングします。
+
 ```bash
 moray --witer
 ```
 
-`--writer`不r具を使用すると、接続先のDBは`ライターインスタンス`になります。
+`--writer`フラグを使用すると、接続先のDBは`ライターインスタンス`になります。
 
 ```bash
 moray --profile stg

@@ -71,3 +71,13 @@ moray --port 3333
 ```
 
 `--port`フラグを使用すると、任意のローカルポートを使用してフォワーディングします。
+
+## moray ec2login
+
+```bash
+moray ec2login
+```
+
+EC2を対話形式で選択し`SSM Session Manager`を使用してログインします。
+
+※なお`bash`でログインしているため、EC2にbashがインストールされている必要があります。

@@ -44,7 +44,7 @@ var ec2loginCmd = &cobra.Command{
 
 		// ユーザーにEC2を選択させる
 		ec2Names := e.GetInstanceNames()
-		ec2Name, err := ui.AskBastion(ec2Names)
+		ec2Name, err := ui.AskEC2(ec2Names)
 		if err != nil {
 			log.Fatalln(err)
 		}

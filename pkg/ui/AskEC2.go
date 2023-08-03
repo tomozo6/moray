@@ -4,13 +4,13 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func AskBastion(EC2InstancesName []string) (*string, error) {
+func AskEC2(EC2InstancesName []string) (*string, error) {
 
 	var qs = []*survey.Question{
 		{
 			Name: "color",
 			Prompt: &survey.Select{
-				Message: "Choose Bastion EC2:",
+				Message: "Choose EC2 Instance:",
 				Options: EC2InstancesName,
 			},
 		},

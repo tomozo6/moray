@@ -55,7 +55,7 @@ to remote hosts with the AWS System Manager session manager.`,
 
 		// ユーザーにBastionを選択させる
 		ec2Names := e.GetInstanceNames()
-		bastionName, err := ui.AskBastion(ec2Names)
+		bastionName, err := ui.AskEC2(ec2Names)
 		if err != nil {
 			log.Fatalln(err)
 		}

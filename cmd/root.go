@@ -120,6 +120,6 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().String("profile", "", "Use a specific profile from your credential file.")
-	rootCmd.PersistentFlags().BoolP("writer", "w", false, "Connect to the writer instance. (Connects to the reader instance if not specified.)")
-	rootCmd.PersistentFlags().Int32P("port", "p", 0, "Local port number. (If not set, the same number as the port number of the connection destination DB will be set as the local port.)")
+	rootCmd.Flags().BoolP("writer", "w", false, "Connect to the writer instance. (Connects to the reader instance if not specified.)")
+	rootCmd.Flags().Int32P("port", "p", 0, "Local port number. (If not set, the same number as the port number of the connection destination DB will be set as the local port.)")
 }

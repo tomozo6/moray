@@ -15,6 +15,8 @@ var (
 	Version = "unset"
 )
 
+var profile string
+
 var rootCmd = &cobra.Command{
 	Use:   "moray",
 	Short: "moray",
@@ -25,17 +27,11 @@ to remote hosts with the AWS System Manager session manager.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// フラグの読み込み
-		inputProfile, _ := cmd.PersistentFlags().GetString("profile")
 		witerFlag, _ := cmd.PersistentFlags().GetBool("writer")
 		inputLocalPort, _ := cmd.PersistentFlags().GetInt32("port")
 
-		// profileが指定されている場合はその値をプロファイル名とする。profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
-		var profile string
-		if len(inputProfile) > 0 {
-			profile = inputProfile
-
-		} else {
+		// profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
+		if len(profile) == 0 {
 			envProfile := os.Getenv("AWS_PROFILE")
 			if len(envProfile) > 0 {
 				profile = envProfile
@@ -119,7 +115,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().String("profile", "", "Use a specific profile from your credential file.")
+	rootCmd.PersistentFlags().StringVar(&profile, "profile", "", "Use a specific profile from your credential file.")
 	rootCmd.Flags().BoolP("writer", "w", false, "Connect to the writer instance. (Connects to the reader instance if not specified.)")
 	rootCmd.Flags().Int32P("port", "p", 0, "Local port number. (If not set, the same number as the port number of the connection destination DB will be set as the local port.)")
 }

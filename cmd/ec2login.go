@@ -16,15 +16,8 @@ var ec2loginCmd = &cobra.Command{
 	Long:  "Login to EC2 securely using SSM Session Manager.",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// フラグの読み込み
-		inputProfile, _ := cmd.PersistentFlags().GetString("profile")
-
-		// profileが指定されている場合はその値をプロファイル名とする。profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
-		var profile string
-		if len(inputProfile) > 0 {
-			profile = inputProfile
-
-		} else {
+		// profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
+		if len(profile) == 0 {
 			envProfile := os.Getenv("AWS_PROFILE")
 			if len(envProfile) > 0 {
 				profile = envProfile

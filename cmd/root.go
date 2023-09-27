@@ -27,8 +27,8 @@ to remote hosts with the AWS System Manager session manager.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		witerFlag, _ := cmd.PersistentFlags().GetBool("writer")
-		inputLocalPort, _ := cmd.PersistentFlags().GetInt32("port")
+		witerFlag, _ := cmd.Flags().GetBool("writer")
+		inputLocalPort, _ := cmd.Flags().GetInt32("port")
 
 		// profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
 		if len(profile) == 0 {

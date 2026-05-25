@@ -72,6 +72,22 @@ moray --port 3333
 
 `--port`フラグを使用すると、任意のローカルポートを使用してフォワーディングします。
 
+## 認証情報の参照ルール
+
+moray は次の優先順で AWS プロファイルを解決します。
+
+1. `--profile` フラグ
+2. `AWS_PROFILE` 環境変数
+3. `AWS_DEFAULT_PROFILE` 環境変数
+4. 未指定（AWS SDK のデフォルト認証チェーン）
+
+Windows PowerShell で `aws login` 後の認証情報を使う場合は、必要に応じて以下を設定してください。
+
+```powershell
+$env:AWS_DEFAULT_PROFILE = "your-profile"
+moray
+```
+
 ## moray ec2login
 
 ```bash

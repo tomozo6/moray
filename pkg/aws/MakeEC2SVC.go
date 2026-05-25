@@ -11,7 +11,7 @@ import (
 func MakeEC2SVC(profile *string) (*ec2.Client, *string) {
 	cfg, err := config.LoadDefaultConfig(
 		context.TODO(),
-		config.WithSharedConfigProfile(*profile),
+		loadConfigOptions(*profile)...,
 	)
 
 	if err != nil {

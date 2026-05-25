@@ -30,15 +30,7 @@ to remote hosts with the AWS System Manager session manager.`,
 		witerFlag, _ := cmd.Flags().GetBool("writer")
 		inputLocalPort, _ := cmd.Flags().GetInt32("port")
 
-		// profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
-		if len(profile) == 0 {
-			envProfile := os.Getenv("AWS_PROFILE")
-			if len(envProfile) > 0 {
-				profile = envProfile
-			} else {
-				profile = "default"
-			}
-		}
+		profile = resolveProfile(profile)
 
 		// ec2Clientの生成及びリージョン名の取得
 		ec2Client, region := aws.MakeEC2SVC(&profile)

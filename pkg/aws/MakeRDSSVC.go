@@ -8,10 +8,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 )
 
-func MakeRDSSVC(profile *string) (*rds.Client, *string){
+func MakeRDSSVC(profile *string) (*rds.Client, *string) {
 	cfg, err := config.LoadDefaultConfig(
 		context.TODO(),
-		config.WithSharedConfigProfile(*profile),
+		loadConfigOptions(*profile)...,
 	)
 
 	if err != nil {

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"runtime"
 	"strconv"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -39,11 +38,12 @@ func SSMPortForwarding(c *ssm.Client, bastionID *string, dbHost *string, dbPort 
 	// }
 
 	// session-manager-pluginを実行するコマンドを構築
-	smpCmd := "session-manager-plugin"
-	if runtime.GOOS == "windows" {
-		smpCmd += ".exe"
+	smpCmd, err := resolveSessionManagerPluginCommand()
+	if err != nil {
+		fmt.Println("Error finding session-manager-plugin:", err)
+		return
 	}
-	cmd := exec.Command(smpCmd, string(encodedSessionOutput), *region, "StartSession", *profile, string(encodedSessionInput))
+	cmd := exec.Command(smpCmd, string(encodedSessionOutput), *region, "StartSession", resolvePluginProfile(*profile), string(encodedSessionInput))
 
 	// コマンドの実行には標準入出力を使う
 	cmd.Stdin = os.Stdin

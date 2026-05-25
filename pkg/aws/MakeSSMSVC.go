@@ -11,7 +11,7 @@ import (
 func MakeSSMSVC(profile *string) (*ssm.Client, *string) {
 	cfg, err := config.LoadDefaultConfig(
 		context.TODO(),
-		config.WithSharedConfigProfile(*profile),
+		loadConfigOptions(*profile)...,
 	)
 
 	if err != nil {

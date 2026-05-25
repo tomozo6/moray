@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/tomozo6/moray/pkg/aws"
@@ -16,15 +15,7 @@ var ec2loginCmd = &cobra.Command{
 	Long:  "Login to EC2 securely using SSM Session Manager.",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// profileが指定されていない場合は環境変数AWS_PROFILEからプロファイル名を取得。AWS_PROFILEが存在しない場合はdefaultとする
-		if len(profile) == 0 {
-			envProfile := os.Getenv("AWS_PROFILE")
-			if len(envProfile) > 0 {
-				profile = envProfile
-			} else {
-				profile = "default"
-			}
-		}
+		profile = resolveProfile(profile)
 
 		// ec2Clientの生成及びリージョン名の取得
 		ec2Client, region := aws.MakeEC2SVC(&profile)
